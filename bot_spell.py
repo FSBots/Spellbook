@@ -233,7 +233,7 @@ class Handler(telepot.helper.ChatHandler):
 #Roba seria
 
 
-token = "524296968:AAH5PUNNSfwjjau8qQICCqUO5Poe-QZEjnE"
+token = "token"
 
 bot = telepot.DelegatorBot(token, [
     include_callback_query_chat_id(pave_event_space()
