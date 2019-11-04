@@ -11,4 +11,4 @@ https://t.me/SpellbookDnD5_bot
 
 @SpellbookDnD5_bot
 
-Currently only Italian is supported.
+Currently only Italian language is supported.
