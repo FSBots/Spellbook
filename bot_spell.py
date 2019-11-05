@@ -17,7 +17,7 @@ class Handler(telepot.helper.ChatHandler):
     level_to_find = None
     level_expected = False
 
-    #Elenchi di bottoni
+    #Menu buttons
     menu = [['Nome','Livello'],['Classe e Livello']]
 
     classes = [['Bardo','Chierico','Druido','Mago'],
@@ -28,34 +28,31 @@ class Handler(telepot.helper.ChatHandler):
 
     short_levels = [['Lv. 1', 'Lv. 2', 'Lv. 3', 'Lv. 4','Lv. 5']]
 
-    #Chat id dei capi branco
+    #Chat id
     chat_id_boss = [1936841,81503607]
 
     def __init__(self, *args, **kwargs):
         super(Handler, self).__init__(*args, **kwargs)
-        #Inizializzo il libro degli incantesimi
-        #Editor del messaggio con l'incantesimo
+        #Spell book initialization
         self._spell_editor = None
-        # Editor del messaggio con l'incantesimo
+        #Message editor initialization
         self._editor = None
-        # Editor del messaggio con la risposta forzata
+        #Forced reply message editor initialization
         self._forcedreply_editor = None
 
-        #Connessione al db
+        #Database connection
         self.spellbook = Spellbook("spellbook", "lanciopalledifuoco", "localhost", "dnd_5_incantesimi")
 
-        #Scelta iniziale
+        #Menu initialization
         self.menuKeyboard = InlineKeyboardMarkup(inline_keyboard=self._get_keyboard(self.menu,'menu'))
-        #Classi e livelli
         self.classKeyboard = InlineKeyboardMarkup(inline_keyboard=self._get_keyboard(self.classes,'class'))
         self.levelKeyboard = InlineKeyboardMarkup(inline_keyboard=self._get_keyboard(self.levels,'level'))
         self.shortlevelKeyboard = InlineKeyboardMarkup(inline_keyboard=self._get_keyboard(self.short_levels,'level'))
 
-    #Gestione callback bottoni
+    #Callback buttons
     #menu,Nome | menu,Classe | menu,Livello | menu,Classe e Livello
     def on_callback_query(self, msg):
         query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-        #print('Callback query:', query_id, from_id, query_data)
         data = str(query_data).split(',')
         if data[0] == 'menu':
             if data[1] == 'Nome':
@@ -74,7 +71,6 @@ class Handler(telepot.helper.ChatHandler):
             if self.level_expected:
                 self._send_levels()
             else:
-                #ricerca classe sola
                 self._send_spells(self.spellbook.ottieniIncantesimiPerClasse(self.class_to_find),2)
         elif data[0] == 'level':
             self.level_to_find = data[1].replace('Lv. ', '')
@@ -88,14 +84,14 @@ class Handler(telepot.helper.ChatHandler):
     def on_chat_message(self,msg):
         text = msg['text'].lower()
         if text == '/start' or text == 'start':
-            #Cancello tutto
+            #Delete all
             self._cancel_last()
             #self._cancel_last_spell()
             self._cancel_forced_reply()
             self.level_expected = False
             self.class_to_find = None
             self.level_to_find = None
-            #Inizio con il menu
+            #Start with first menu
             if msg['chat']['id'] in self.chat_id_boss:
                 self._send_menu('Ciao Babbo miooo!\nRicerca incantesimo per:')
             else:
@@ -106,7 +102,7 @@ class Handler(telepot.helper.ChatHandler):
                     self._send_spells(self.spellbook.ottieniIncantesimiPerNome(text),3)
 
 
-    #Alla scadere del timeout
+    #Timeout expired
     def on__idle(self, event):
         self._cancel_last()
         self._cancel_last_spell()
@@ -114,26 +110,25 @@ class Handler(telepot.helper.ChatHandler):
         self.close()
 
 
-    #Cancello l'ultimo messaggio di scelta inviato
+    #Delete of the last message
     def _cancel_last(self):
         if self._editor is not None:
             self._editor.deleteMessage()
             self._editor = None
 
-    #Cancello l'ultimo messaggio con una magia inviato
+    #Delete of the last spell message
     def _cancel_last_spell(self):
         if self._spell_editor is not None:
             self._spell_editor.deleteMessage()
             self._spell_editor = None
 
-    #Cancello l'ultimo messaggio con risposta forzata
+    #Delete of the last forced reply message
     def _cancel_forced_reply(self):
         if self._forcedreply_editor is not None:
             self._forcedreply_editor.deleteMessage()
             self._forcedreply_editor = None
 
-    #Cancello l'ultima magia inviata e invio la magia passata come parametro
-    #cercandola nell'ultimo elenco richiesto al db
+    #Delete of the last spell and send of the spell passed as parameter
     def _send_spell_message(self,spell):
         for tupla in self.last_spellbook:
             if tupla['Nome'] == spell:
@@ -149,7 +144,7 @@ class Handler(telepot.helper.ChatHandler):
                 _spell = self.sender.sendMessage(spell_str)
                 self._spell_editor = telepot.helper.Editor(self.bot, _spell)
 
-    #Metodo che risolve i caratteri errati nei messaggi
+    #Resolution of the errors in message character
     def restore_windows_1252_characters(self,s):
         import re
         def to_windows_1252(match):
@@ -160,21 +155,18 @@ class Handler(telepot.helper.ChatHandler):
                 return ''
         return re.sub(r'[\u0080-\u0099]', to_windows_1252, s)
 
-    #Creazione della tastiera generica per gli array delle classi e dei livelli
+    #Creation of the keyboard for generic spell list
     def _get_keyboard(self, array, callback=''):
         res = list(map(lambda classe: list(map(
             lambda c: dict(text=str(c), callback_data=callback + ',' + str(c)), classe)), array))
         return res
 
-    #Creazione della tastiera prima dell'invio
-    #Dalle tuple crea un elenco di bottoni
+    #Creation of the keyboard before send
     def _get_spell_keyboard(self,spellist,mode):
-        #Mode 0 Crea il bottone solo con il nome
-        #1 con la classe
-        #2 con il livello
-        #3 entrambi
-        #print (spellist.__len__())
-
+        #Mode 0 name
+        #1 class
+        #2 level
+        #3 both
         res = []
         for tupla in spellist:
             nome = self.restore_windows_1252_characters(tupla['Nome'])
@@ -196,12 +188,11 @@ class Handler(telepot.helper.ChatHandler):
         return res
 
 
-    #Metodi per inviare i messaggi con delle InlineKeyboard
+    #MEthod for send message with the inline keyboards
 
     def _send_spells(self, spellist,mode):
         self._cancel_last()
         self.last_spellbook = spellist
-        #creazione della tastiera
         keyboard = self._get_spell_keyboard(spellist, mode)
         if keyboard.__len__() == 0:
             self.sender.sendMessage('Nessun incantesimo!')
@@ -217,7 +208,7 @@ class Handler(telepot.helper.ChatHandler):
 
     def _send_levels(self):
         self._cancel_last()
-        #Il paladino e il ranger hanno livelli di incantesimi diversi
+
         if self.class_to_find == 'Paladino' or self.class_to_find == 'Ranger':
             sent = self.sender.sendMessage('Scegli il livello:', reply_markup=self.shortlevelKeyboard)
         else:
@@ -230,9 +221,7 @@ class Handler(telepot.helper.ChatHandler):
         self._editor = telepot.helper.Editor(self.bot, sent)
 
 
-#Roba seria
-
-
+#Serious stuff
 token = "token"
 
 bot = telepot.DelegatorBot(token, [
@@ -246,25 +235,3 @@ print('Listening ...')
 
 while 1:
     time.sleep(10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
