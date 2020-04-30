@@ -12,3 +12,9 @@ https://t.me/SpellbookDnD5_bot
 @SpellbookDnD5_bot
 
 Currently only Italian language is supported.
+
+Libraries to install:
+
+python-telegram-bot
+PyMySQL
+mysqlclient
