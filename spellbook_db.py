@@ -47,6 +47,7 @@ class Spellbook:
             aux["Durata"] = row[5]
             aux["Gittata"] = row[6]
             aux["Descrizione"] = row[7]
+            aux["Manuale"] = row[9]
 
             content_list.append(aux)
             aux = {}
@@ -62,9 +63,9 @@ class Spellbook:
         except:
             return False
 
-    def add_favourite_by_id(self,userId,incantesimo):
+    def add_in_history_by_id(self,userId,incantesimo):
         try:
-            query = ("CALL `aggiungiPreferiti`('"+str(userId)+"','"+incantesimo+"');")
+            query = ("CALL `aggiungiInCronologia`('"+str(userId)+"','"+incantesimo+"');")
             self.cursor.execute(query)
             self.database_connection.commit()
             return True;
@@ -88,3 +89,13 @@ class Spellbook:
         for tupla in content:
             for nomeColonna, valore in tupla.items():
                 print(nomeColonna+" : "+str(valore))
+    
+    def get_spells_history(self, chat_id, limit):
+        query = ("CALL ottieniCronologia('"+chat_id+"','"+limit+"');")
+        return self.get_query_result(query)
+    
+    def get_users(self):
+        query = ("CALL getUsers();")
+        return self.get_query_result(query)
+
+    
