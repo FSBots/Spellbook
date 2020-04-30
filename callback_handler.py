@@ -95,11 +95,11 @@ def callback_level(update, context, choice):
     spells = []
     keyboards = ""
     if get_last_class_name() != "":
-        spells = spellbook.ottieniIncantesimiPerClasseDiLivello(get_last_class_name(), choice)
+        spells = spellbook.get_spells_by_class_level(get_last_class_name(), choice)
         keyboard = get_spells_keyboard(spells, "name")
         set_last_class_name("")
     else:
-        spells = spellbook.ottieniIncantesimiDiLivello(choice)
+        spells = spellbook.get_spells_by_level(choice)
         keyboard = get_spells_keyboard(spells, "class")
     set_cached_spells(spells)
     edit_message_with_keyboard(bot, message.chat_id, message.message_id, SPELL_MESSAGE, keyboard)
@@ -110,7 +110,7 @@ def message_callback_handler(update, context):
     message = update.message
     bot = context.bot
     # Db request
-    spells = spellbook.ottieniIncantesimiPerNome(message.text)
+    spells = spellbook.get_spells_by_name(message.text)
     set_cached_spells(spells)
     keyboard = get_spells_keyboard(spells, "classlevel")
     send_message_with_keyboard(bot, message.chat_id, SPELL_MESSAGE, keyboard)

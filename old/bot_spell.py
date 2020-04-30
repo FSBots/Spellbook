@@ -71,13 +71,13 @@ class Handler(telepot.helper.ChatHandler):
             if self.level_expected:
                 self._send_levels()
             else:
-                self._send_spells(self.spellbook.ottieniIncantesimiPerClasse(self.class_to_find),2)
+                self._send_spells(self.spellbook.get_spells_by_class(self.class_to_find), 2)
         elif data[0] == 'level':
             self.level_to_find = data[1].replace('Lv. ', '')
             if self.level_expected:
-                self._send_spells(self.spellbook.ottieniIncantesimiPerClasseDiLivello(self.class_to_find,self.level_to_find),0)
+                self._send_spells(self.spellbook.get_spells_by_class_level(self.class_to_find, self.level_to_find), 0)
             else:
-                self._send_spells(self.spellbook.ottieniIncantesimiDiLivello(self.level_to_find),1)
+                self._send_spells(self.spellbook.get_spells_by_level(self.level_to_find), 1)
         elif data[0] == 'spell':
             self._send_spell_message(data[1])
 
@@ -99,7 +99,7 @@ class Handler(telepot.helper.ChatHandler):
         else:
             if 'reply_to_message' in msg :
                 if msg['reply_to_message']['text'] == 'Spara un nome!':
-                    self._send_spells(self.spellbook.ottieniIncantesimiPerNome(text),3)
+                    self._send_spells(self.spellbook.get_spells_by_name(text), 3)
 
 
     #Timeout expired
