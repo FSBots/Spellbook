@@ -1,170 +1,63 @@
-import pymysql
-pymysql.install_as_MySQLdb()
-import MySQLdb
+import logging
+import callback_handler
+from bot_token import token
+from callback_handler import *
+from message_manager import *
+from keyboard_manager import get_menu_keyboard
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 
-class obj:
-    pass
-    
-class Spellbook:
-    #Credenziali di accesso
-    userName = None
-    userPswd = None
-    url = None
-    dbName = None
-    
-    cn_object = None #Oggetto connessione al database
-    cursor = None #Cursore ottenuto da cn_object
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-    def __init__(self,new_userName,new_userPswd,new_url,new_dbName):
-        self.url = new_url
-        self.userName = new_userName
-        self.userPswd = new_userPswd
-        self.dbName = new_dbName
-        #Mi collego al database
-        self.cn_object = MySQLdb.connect(self.url,
-                                         self.userName,
-                                         self.userPswd,
-                                         self.dbName)
-        self.cursor = self.cn_object.cursor()
+# Chat id
+chat_id_boss = [1936841, 81503607]
 
-    def __del__(self):
-        self.cn_object.close()
-        self.cursor.close()
+# Constants
+STARTING_MESSAGE = "Ricerca incantesimo per:"
 
-    def ottieniIncantesimiDiLivello(self,lvl):
-        query = ("CALL `ottieniIncantesimiDiLivello`('"+str(lvl)+"');")
-        self.cursor.execute(query)
-        contentList = []
-        aux = {}
-        for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            
-            contentList.append(aux)
-            aux = {}
-        return contentList
-    def ottieniIncantesimiPerClasseDiLivello(self,classe,lvl):
-        query = ("CALL `ottieniIncantesimiPerClasseDiLivello`('"+classe+"','"+str(lvl)+"');")
-        self.cursor.execute(query)
-        contentList = []
-        aux = {}
-        for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            
-            contentList.append(aux)
-            aux = {}
-        return contentList
-    def ottieniIncantesimiPerClasse(self,classe):
-        query = ("CALL `ottieniIncantesimiPerClasse`('"+classe+"');")
-        self.cursor.execute(query)
-        contentList = []
-        aux = {}
-        for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            
-            contentList.append(aux)
-            aux = {}
-        return contentList
-    def ottieniIncantesimiPerNome(self,nome):
-        query = ("CALL `ottieniIncantesimiPerNome`('"+nome+"');")
-        self.cursor.execute(query)
-        contentList = []
-        aux = {}
-        for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            
-            contentList.append(aux)
-            aux = {}
-        return contentList
-    def aggiungiUtente(self,userId):
-        try:
-            query = ("CALL `aggiungiUtente`('"+str(userId)+"');")
-            self.cursor.execute(query)
-            self.cn_object.commit()
-            return True
-        except:
-            return False
-    def aggiungiPreferiti(self,userId,incantesimo):
-        try:
-            query = ("CALL `aggiungiPreferiti`('"+str(userId)+"','"+incantesimo+"');")
-            self.cursor.execute(query)
-            self.cn_object.commit()
-            return True;
-        except:
-            return False
-    def rimuoviPreferiti(self,userId,incantesimo):
-        try:
-            query = ("CALL `rimuoviPreferiti`('"+str(userId)+"','"+incantesimo+"');")
-            self.cursor.execute(query)
-            self.cn_object.commit()
-            return True;
-        except:
-            return False
-    def ottieniPreferiti(self, idUser):
-        query = ("CALL `ottieniPreferiti`('"+str(idUser)+"');")
-        self.cursor.execute(query)
-        contentList = []
-        aux = {}
-        for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            
-            contentList.append(aux)
-            aux = {}
-        return contentList
-    def stampaRisultato(self,content):
-        for tupla in content:
-            for nomeColonna, valore in tupla.items():
-                print(nomeColonna+" : "+str(valore))
-        
-        
-'''
-obj = Spellbook("standard","guruguru","localhost","dnd_5_incantesimi")
 
-obj.stampaRisultato(obj.ottieniIncantesimiDiLivello(2))
-obj.stampaRisultato(obj.ottieniIncantesimiPerNome("Ami"))
+def generate_starting_message(id):
+    message = ""
+    if id == chat_id_boss[0]:
+        message = "Ciao Babbo Salo!\n"
+    if id == chat_id_boss[1]:
+        message = "Ciao Babbo Frusco!\n"
+    return message + STARTING_MESSAGE
 
-print(obj.aggiungiUtente(123456))
-print(obj.aggiungiPreferiti(123456,"Amicizia"))
-print(obj.rimuoviPreferiti(123456,"Amicizia"))
-print(obj.aggiungiPreferiti(123456,"Amicizia"))
-obj.stampaRisultato(obj.ottieniPreferiti(123456))
-'''
+
+# /start
+def start(update, context):
+    initialize_database()
+    keyboard = get_menu_keyboard()
+    message = generate_starting_message(update.message["chat"]["id"])
+    send_message_with_keyboard(context.bot, update.message.chat_id, message, keyboard)
+
+
+# /help
+def help(update, context):
+    send_message_text(context.bot, update.message.chat_id, "Use /start to search your D&D Spell!")
+
+
+# /error
+def error(update, context):
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+
+def main():
+    updater = Updater(token, use_context=True)
+
+    updater.dispatcher.add_handler(CommandHandler('start', start))
+    updater.dispatcher.add_handler(CallbackQueryHandler(callback_handler))
+    updater.dispatcher.add_handler(CommandHandler('help', help))
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, message_callback_handler))
+    updater.dispatcher.add_error_handler(error)
+
+    # Start the Bot
+    updater.start_polling()
+    # Run the bot until the user presses Ctrl-C or the process receives SIGINT, SIGTERM or SIGABRT
+    updater.idle()
+
+
+if __name__ == '__main__':
+    main()
