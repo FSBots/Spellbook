@@ -11,7 +11,7 @@ menu_keyboard = [["Nome", "Livello"], ["Classe e livello"], ["Recenti", "Statist
 
 
 # Create a keyboard from the array passed as parameter
-def create_keyboard(keyboard, callback_string=""):
+def create_base_keyboard(keyboard, callback_string=""):
     res = []
     col = []
     for row in keyboard:
@@ -22,33 +22,30 @@ def create_keyboard(keyboard, callback_string=""):
     return res
 
 
-# Create a keyboard from the array passed as parameter
-# Keyboard with only one column
-def create_row_keyboard(keyboard, callback_string=""):
-    res = []
-    for row in keyboard:
-        for column in row:
-            res.append(InlineKeyboardButton(str(column), callback_data=callback_string + "," + str(column)))
-    return res
-
-
 def get_classes_keyboard():
-    keyboard = create_keyboard(classes_keyboard, "classes")
-    return InlineKeyboardMarkup(keyboard)
-
-
-def get_levels_keyboard():
-    keyboard = create_keyboard(levels_keyboard, "level")
+    keyboard = create_base_keyboard(classes_keyboard, "class")
     return InlineKeyboardMarkup(keyboard)
 
 
 def get_menu_keyboard():
-    keyboard = create_keyboard(menu_keyboard, "menu")
+    keyboard = create_base_keyboard(menu_keyboard, "menu")
     return InlineKeyboardMarkup(keyboard)
 
 
-#Directly created InlineKeyboardButton instances, composed by [decorated spell name,(callbackstring,spell name]
-#Notice that the spell name in the callback is not the same displayed in the button
+# Directly created InlineKeyboardButton instances, customized for levels
+def get_levels_keyboard():
+    keyboard = []
+    col = []
+    for row in levels_keyboard:
+        for column in row:
+            col.append(InlineKeyboardButton(str(column), callback_data="level," + str(column)[4:5]))
+        keyboard.append(col)
+        col = []
+    return InlineKeyboardMarkup(keyboard)
+
+
+# Directly created InlineKeyboardButton instances, composed by [decorated spell name,(callbackstring,spell name]
+# Notice that the spell name in the callback is not the same displayed in the button
 def get_spells_keyboard(list, mode):
     spells = []
     for tupla in list:

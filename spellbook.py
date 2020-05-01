@@ -32,13 +32,13 @@ def start(update, context):
     set_spellbook(Spellbook())
     keyboard = get_menu_keyboard()
     message = generate_starting_message(update.message["chat"]["id"])
-    send_message_with_keyboard(context.bot, update.message.chat_id, message, keyboard)
+    send_message_with_keyboard(context.bot, update.message, message, keyboard)
     initialize_users(update.message.chat_id)
 
 
 # /help
 def help(update, context):
-    send_message_text(context.bot, update.message.chat_id, "Use /start to search your D&D Spell!")
+    send_message_text(context.bot, update.message, "Use /start to search your D&D Spell!")
 
 
 # /error

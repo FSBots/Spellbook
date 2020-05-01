@@ -91,7 +91,7 @@ class Spellbook:
                 print(nomeColonna+" : "+str(valore))
     
     def get_spells_history(self, chat_id, limit):
-        query = ("CALL ottieniCronologia('"+chat_id+"','"+limit+"');")
+        query = ("CALL ottieniCronologia('"+str(chat_id)+"','"+str(limit)+"');")
         return self.get_query_result(query)
     
     def get_users(self):
