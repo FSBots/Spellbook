@@ -5,6 +5,7 @@ from callback_handler import *
 from message_manager import *
 from keyboard_manager import get_menu_keyboard
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
+from spellbook_db import Spellbook
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -28,10 +29,11 @@ def generate_starting_message(id):
 
 # /start
 def start(update, context):
-    initialize_database()
+    set_spellbook(Spellbook())
     keyboard = get_menu_keyboard()
     message = generate_starting_message(update.message["chat"]["id"])
     send_message_with_keyboard(context.bot, update.message.chat_id, message, keyboard)
+    initialize_users(update.message.chat_id)
 
 
 # /help

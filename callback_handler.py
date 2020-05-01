@@ -1,11 +1,11 @@
 from keyboard_manager import *
 from message_manager import *
-from spellbook_db import Spellbook
 
 FORCED_REPLY_MESSAGE = "Spara un nome!"
 LEVELS_MESSAGE = "Scegli un livello:"
 CLASSES_MESSAGE = "Scegli una classe:"
 SPELL_MESSAGE = "Scegli un incantesimo:"
+
 
 # Callback of a general message
 def message_callback_handler(update, context):
@@ -13,9 +13,12 @@ def message_callback_handler(update, context):
     bot = context.bot
 
 
-def initialize_database():
-    global spellbook
-    spellbook = Spellbook()
+# Saving of the users list and check if current chat_id is there
+# if not, we insert the user in the db
+def initialize_users(chat_id):
+    set_users_list(get_spellbook().get_users())
+    if not get_users_list().__contains__(chat_id):
+        get_spellbook().add_user(chat_id)
 
 
 # Main handler
@@ -77,12 +80,16 @@ def get_spell_from_cache(choice):
     spell = ""
     for tupla in get_cached_spells():
         if tupla['Nome'] == choice:
-            spell = 'Nome: ' + choice + '\n' + \
-                        tupla['Tipo'] + ' di livello ' + str(tupla['Livello']) + '\n' + \
-                        'Tempo di lancio: ' + tupla['TempoDiLancio'] + '\n' + \
-                        'Gittata: ' + tupla['Gittata'] + '\n' + \
-                        'Componenti: ' + tupla['Componenti'] + '\n' + \
-                        'Durata: ' + tupla['Durata'] + '\n' + \
+            if tupla['Manuale'] == 'Xanathar':
+                spell = '<b>' + str.upper(choice) + ' [XAN]\n'
+            else:
+                spell = '<b>' + str.upper(choice) + '\n'
+            spell += tupla['Tipo'] + ' di livello ' + str(tupla['Livello']) + '</b>\n' + \
+                        '<b>Tempo di lancio: </b>' + tupla['TempoDiLancio'] + '\n' + \
+                        '<b>Gittata: </b>' + tupla['Gittata'] + '\n' + \
+                        '<b>Componenti: </b>' + tupla['Componenti'] + '\n' + \
+                        '<b>Durata: </b>' + tupla['Durata'] + '\n' + \
+                        '<b>Descrizione: </b>\n' + \
                         tupla['Descrizione']
     return spell
 
@@ -95,11 +102,11 @@ def callback_level(update, context, choice):
     spells = []
     keyboards = ""
     if get_last_class_name() != "":
-        spells = spellbook.get_spells_by_class_level(get_last_class_name(), choice)
+        spells = get_spellbook().get_spells_by_class_level(get_last_class_name(), choice)
         keyboard = get_spells_keyboard(spells, "name")
         set_last_class_name("")
     else:
-        spells = spellbook.get_spells_by_level(choice)
+        spells = get_spellbook().get_spells_by_level(choice)
         keyboard = get_spells_keyboard(spells, "class")
     set_cached_spells(spells)
     edit_message_with_keyboard(bot, message.chat_id, message.message_id, SPELL_MESSAGE, keyboard)
@@ -110,7 +117,7 @@ def message_callback_handler(update, context):
     message = update.message
     bot = context.bot
     # Db request
-    spells = spellbook.get_spells_by_name(message.text)
+    spells = get_spellbook().get_spells_by_name(message.text)
     set_cached_spells(spells)
     keyboard = get_spells_keyboard(spells, "classlevel")
     send_message_with_keyboard(bot, message.chat_id, SPELL_MESSAGE, keyboard)

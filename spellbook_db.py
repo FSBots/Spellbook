@@ -96,6 +96,8 @@ class Spellbook:
     
     def get_users(self):
         query = ("CALL getUsers();")
-        return self.get_query_result(query)
-
-    
+        self.cursor.execute(query)
+        content_list = []
+        for row in self.cursor:
+            content_list.append(row[0])
+        return content_list
