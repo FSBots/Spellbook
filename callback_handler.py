@@ -1,5 +1,8 @@
+from telegram.ext import run_async
+
 from keyboard_manager import *
 from message_manager import *
+from spellbook_db import Spellbook
 
 FORCED_REPLY_MESSAGE = "Spara un nome!"
 LEVELS_MESSAGE = "Scegli un livello:"
@@ -7,16 +10,6 @@ CLASSES_MESSAGE = "Scegli una classe:"
 SPELL_MESSAGE = "Scegli un incantesimo:"
 NO_SPELL_MESSAGE = "Nessun incantesimo trovato!"
 HISTORY_LIMIT = "5"
-
-
-# Saving of the users list and check if current chat_id is there
-# if not, we insert the user in the db
-def initialize_users(chat_id):
-    users = get_spellbook().get_users()
-    if not users.__contains__(chat_id):
-        get_spellbook().add_user(chat_id)
-        users.append(chat_id)
-    set_users_list(users)
 
 
 # Main handler

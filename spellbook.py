@@ -29,12 +29,24 @@ def generate_starting_message(id):
 
 # /start
 def start(update, context):
-    set_spellbook(Spellbook())
     keyboard = get_menu_keyboard()
     message = generate_starting_message(update.message["chat"]["id"])
     send_message_with_keyboard(context.bot, update.message, message, keyboard)
-    initialize_users(update.message.chat_id)
+    initialize_users_list(update.message.chat_id)
 
+
+# Saving of the users list and check if current chat_id is there
+# if not, we insert the user in the db
+def initialize_users_list(chat_id):
+    # Recents initialization
+    users = get_spellbook().get_users()
+    if not users.__contains__(chat_id):
+        get_spellbook().add_user(chat_id)
+        users.append(chat_id)
+    set_users_list(users)
+
+def initialize_db():
+    set_spellbook(Spellbook())
 
 # /help
 def help(update, context):
@@ -45,10 +57,9 @@ def help(update, context):
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-
 def main():
+    initialize_db()
     updater = Updater(token, use_context=True)
-
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CallbackQueryHandler(callback_handler))
     updater.dispatcher.add_handler(CommandHandler('help', help))
@@ -59,6 +70,7 @@ def main():
     updater.start_polling()
     # Run the bot until the user presses Ctrl-C or the process receives SIGINT, SIGTERM or SIGABRT
     updater.idle()
+
 
 
 if __name__ == '__main__':
