@@ -14,7 +14,7 @@ Currently only Italian language is supported.
 Want to help us to implement your language? No problem, just contact us! ❤️
 
 ### Requirements
-If you  want help with development of the code, make sure to install requirements first:
+If you want to help with the development of the code, make sure to install requirements first:
 ```
 $ pip install python-telegram-bot PyMySQL mysqlclient
 ```
