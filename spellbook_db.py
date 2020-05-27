@@ -18,19 +18,19 @@ class Spellbook:
         self.cursor = None
 
     def get_spells_by_level(self, lvl):
-        query = ("CALL `ottieniIncantesimiDiLivello`('"+str(lvl)+"');")
+        query = ("CALL `get_spells_by_level`('"+str(lvl)+"');")
         return self.get_query_result(query)
 
     def get_spells_by_class_level(self, classe, lvl):
-        query = ("CALL `ottieniIncantesimiPerClasseDiLivello`('"+classe+"','"+str(lvl)+"');")
+        query = ("CALL `get_spells_by_class_level`('"+classe+"','"+str(lvl)+"');")
         return self.get_query_result(query)
 
     def get_spells_by_class(self, classe):
-        query = ("CALL `ottieniIncantesimiPerClasse`('"+classe+"');")
+        query = ("CALL `get_spells_by_class`('"+classe+"');")
         return self.get_query_result(query)
 
     def get_spells_by_name(self, nome):
-        query = ("CALL `ottieniIncantesimiPerNome`('"+nome+"');")
+        query = ("CALL `get_spells_by_name`('"+nome+"');")
         return self.get_query_result(query)
 
     def get_query_result(self, query):
@@ -38,16 +38,16 @@ class Spellbook:
         content_list = []
         aux = {}
         for row in self.cursor:
-            aux["Classe"] = row[8]
-            aux["Nome"] = row[0]
-            aux["Tipo"] = row[1]
-            aux["Livello"] = row[2]
-            aux["TempoDiLancio"] = row[3]
-            aux["Componenti"] = row[4]
-            aux["Durata"] = row[5]
-            aux["Gittata"] = row[6]
-            aux["Descrizione"] = row[7]
-            aux["Manuale"] = row[9]
+            aux["Class"] = row[8]
+            aux["Name"] = row[0]
+            aux["School"] = row[1]
+            aux["Level"] = row[2]
+            aux["CastingTime"] = row[3]
+            aux["Components"] = row[4]
+            aux["Duration"] = row[5]
+            aux["Range"] = row[6]
+            aux["Description"] = row[7]
+            aux["Manual"] = row[9]
 
             content_list.append(aux)
             aux = {}
@@ -56,7 +56,7 @@ class Spellbook:
 #Unused functions
     def add_user(self,userId):
         try:
-            query = ("CALL `aggiungiUtente`('"+str(userId)+"');")
+            query = ("CALL `add_user`('"+str(userId)+"');")
             self.cursor.execute(query)
             self.database_connection.commit()
             return True
@@ -65,24 +65,33 @@ class Spellbook:
 
     def add_in_history_by_id(self,userId,incantesimo):
         try:
-            query = ("CALL `aggiungiInCronologia`('"+str(userId)+"','"+incantesimo+"');")
+            query = ("CALL `add_in_history_by_id`('"+str(userId)+"','"+incantesimo+"');")
             self.cursor.execute(query)
             self.database_connection.commit()
-            return True;
+            return True
+        except:
+            return False
+    
+    def add_in_reports_by_id(self,userId,incantesimo,report):
+        try:
+            query = ("CALL `add_in_reports_by_id`('"+str(userId)+"','"+incantesimo+"','"+report+"');")
+            self.cursor.execute(query)
+            self.database_connection.commit()
+            return True
         except:
             return False
 
     def remove_favourite(self,userId,incantesimo):
         try:
-            query = ("CALL `rimuoviPreferiti`('"+str(userId)+"','"+incantesimo+"');")
+            query = ("CALL `remove_favourite`('"+str(userId)+"','"+incantesimo+"');")
             self.cursor.execute(query)
             self.database_connection.commit()
-            return True;
+            return True
         except:
             return False
 
     def get_favourite(self, idUser):
-        query = ("CALL `ottieniPreferiti`('"+str(idUser)+"');")
+        query = ("CALL `get_favourite`('"+str(idUser)+"');")
         return self.get_query_result(query)
 
     def print_result(self,content):
@@ -91,11 +100,11 @@ class Spellbook:
                 print(nomeColonna+" : "+str(valore))
     
     def get_spells_history(self, chat_id, limit):
-        query = ("CALL ottieniCronologia('"+str(chat_id)+"','"+str(limit)+"');")
+        query = ("CALL get_spells_history('"+str(chat_id)+"','"+str(limit)+"');")
         return self.get_query_result(query)
     
     def get_users(self):
-        query = ("CALL getUsers();")
+        query = ("CALL get_users();")
         self.cursor.execute(query)
         content_list = []
         for row in self.cursor:
