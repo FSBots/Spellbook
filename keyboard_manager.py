@@ -8,6 +8,8 @@ levels_keyboard = [["Lv. 0", "Lv. 1", "Lv. 2", "Lv. 3", "Lv. 4"],
           ["Lv. 5", "Lv. 6", "Lv. 7", "Lv. 8", "Lv. 9"]]
 
 menu_keyboard = [["Nome", "Livello"], ["Classe e livello"], ["Recenti", "Statistiche"]]
+spell_options_keyboard = [["Segnala", "Nuova ricerca"]]
+report_keybord = [["Descrizione", "Info"], ["Tipo", "Livello"]]
 
 
 # Create a keyboard from the array passed as parameter
@@ -32,6 +34,16 @@ def get_menu_keyboard():
     return InlineKeyboardMarkup(keyboard)
 
 
+def get_under_spell_keybord():
+    keyboard = create_base_keyboard(spell_options_keyboard, "spell_options")
+    return InlineKeyboardMarkup(keyboard)
+
+
+def get_report_keybord():
+    keyboard = create_base_keyboard(report_keybord, "report")
+    return InlineKeyboardMarkup(keyboard)
+
+
 # Directly created InlineKeyboardButton instances, customized for levels
 def get_levels_keyboard():
     keyboard = []
@@ -49,18 +61,18 @@ def get_levels_keyboard():
 def get_spells_keyboard(list, mode):
     spells = []
     for tupla in list:
-        name = tupla['Nome']
+        name = tupla['Name']
         if mode == "class":
-            classe = tupla['Classe']
+            classe = tupla['Class']
             str_button = name + "[" + classe + "]"
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "level":
-            livello = tupla['Livello']
+            livello = tupla['Level']
             str_button = "Lv" + str(livello) + "-" + name
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "classlevel":
-            classe = tupla['Classe']
-            livello = tupla['Livello']
+            classe = tupla['Class']
+            livello = tupla['Level']
             str_button = "Lv" + str(livello) + "-" + name + "[" + classe + "]"
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "name":

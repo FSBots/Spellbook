@@ -1,7 +1,6 @@
 import logging
-import callback_handler
 from bot_token import token
-from callback_handler import *
+from callback_handler.main_handler import *
 from message_manager import *
 from keyboard_manager import get_menu_keyboard
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
@@ -35,7 +34,7 @@ def start(update, context):
     initialize_users_list(update.message.chat_id)
 
 
-# Saving of the users list and check if current chat_id is there
+# Saving the users list and check if current chat_id is there
 # if not, we insert the user in the db
 def initialize_users_list(chat_id):
     # Recents initialization
@@ -45,8 +44,10 @@ def initialize_users_list(chat_id):
         users.append(chat_id)
     set_users_list(users)
 
+
 def initialize_db():
     set_spellbook(Spellbook())
+
 
 # /help
 def help(update, context):
@@ -57,20 +58,20 @@ def help(update, context):
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+
 def main():
     initialize_db()
     updater = Updater(token, use_context=True)
     updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(CallbackQueryHandler(callback_handler))
+    updater.dispatcher.add_handler(CallbackQueryHandler(main_callback_handler))
     updater.dispatcher.add_handler(CommandHandler('help', help))
-    updater.dispatcher.add_handler(MessageHandler(Filters.text, message_callback_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.reply, reply_message_callback_handler))
     updater.dispatcher.add_error_handler(error)
 
     # Start the Bot
     updater.start_polling()
     # Run the bot until the user presses Ctrl-C or the process receives SIGINT, SIGTERM or SIGABRT
     updater.idle()
-
 
 
 if __name__ == '__main__':
