@@ -1,6 +1,8 @@
 # Spellbook
-![Spellbook](https://github.com/FSBots/Spellbook/blob/master/Logo/spellbook_icon_tiny.jpg?raw=true)
 ### Telegram bot wrote in Python for displaying D&D 5e spells.
+<p align="center">
+  <img src="https://github.com/FSBots/Spellbook/blob/master/Logo/spellbook_icon_small.jpg?raw=true">
+</p>
 
 ## Try now Spellbook
 You can find Spellbook bot [Here](https://t.me/SpellbookDnD5_bot) or you can find it on telegram search bar as @SpellbookDnD5_bot
