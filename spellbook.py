@@ -1,4 +1,5 @@
 import logging
+from telegram.error import NetworkError
 from bot_token import token
 from callback_handler.main_handler import *
 from message_manager import *
@@ -30,8 +31,15 @@ def generate_starting_message(id):
 def start(update, context):
     keyboard = get_menu_keyboard()
     message = generate_starting_message(update.message["chat"]["id"])
-    send_message_with_keyboard(context.bot, update.message, message, keyboard)
     initialize_users_list(update.message.chat_id)
+    while True:
+        try:
+            send_message_with_keyboard(context.bot, update.message, message, keyboard)
+        except NetworkError:
+            logger.error("NetworkError")
+        else:
+            break
+
 
 
 # Saving the users list and check if current chat_id is there
