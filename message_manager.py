@@ -48,10 +48,10 @@ def send_html_message(bot, message, text, keyboard):
     )
 
 
-def edit_last_html_message(bot, message, text, keyboard):
+def edit_last_html_message(bot, message, last_message_id, text, keyboard):
     return bot.edit_message_text(
         chat_id=message.chat_id,
-        message_id=get_last_message_id(),
+        message_id=last_message_id,
         text=text,
         parse_mode=telegram.ParseMode.HTML,
         reply_markup=keyboard

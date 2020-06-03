@@ -29,17 +29,25 @@ def generate_starting_message(id):
 
 # /start
 def start(update, context):
+    initialize_context(context)
     keyboard = get_menu_keyboard()
     message = generate_starting_message(update.message["chat"]["id"])
-    initialize_users_list(update.message.chat_id)
     while True:
         try:
             send_message_with_keyboard(context.bot, update.message, message, keyboard)
         except NetworkError:
-            logger.error("NetworkError")
+            # Network Error exception is raised when bot is unused for some time and then /start is called
+            logger.error("Network error, bot unused for some time!")
         else:
             break
+    initialize_users_list(update.message.chat_id)
 
+
+def initialize_context(context):
+    context.user_data[LAST_CLASS_NAME] = ""
+    context.user_data[LAST_MESSAGE_ID] = ""
+    context.user_data[CACHED_SPELL] = ""
+    context.user_data[LAST_SPELL_NAME] = ""
 
 
 # Saving the users list and check if current chat_id is there
@@ -64,7 +72,8 @@ def help(update, context):
 
 # /error
 def error(update, context):
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+    logger.warning('Update "%s"', update)
+    logger.warning('Error "%s"', context.error)
 
 
 def main():

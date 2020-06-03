@@ -28,14 +28,14 @@ def main_callback_handler(update, context):
     elif callback == "report":
         callback_report(update, context, choice)
     elif callback == "class":
-        set_last_class_name(choice)
+        context.user_data[LAST_CLASS_NAME] = choice
         callback_menu(update, context, "Livello")
 
 
 # Callback of a main menu click
 def callback_menu(update, context, choice):
     message = update.callback_query.message
-    set_last_message_id(None)
+    context.user_data[LAST_MESSAGE_ID] = None
 
     if choice == "Nome":
         send_forced_message(context.bot, message, FORCED_REPLY_MESSAGE)
@@ -54,7 +54,7 @@ def callback_menu(update, context, choice):
         spells = get_spellbook().get_spells_history(message.chat_id, HISTORY_LIMIT)
         keyboard = get_spells_keyboard(spells, "classlevel")
         if spells:
-            set_cached_spells(spells)
+            context.user_data[CACHED_SPELL] = spells
             text = SPELL_MESSAGE
         else:
             text = NO_SPELL_MESSAGE
@@ -70,10 +70,9 @@ def reply_message_callback_handler(update, context):
     bot = context.bot
     # Db request
     spells = get_spellbook().get_spells_by_name(message.text)
-    set_cached_spells(spells)
     keyboard = get_spells_keyboard(spells, "classlevel")
     if spells:
-        set_cached_spells(spells)
+        context.user_data[CACHED_SPELL] = spells
         text = SPELL_MESSAGE
     else:
         text = NO_SPELL_MESSAGE

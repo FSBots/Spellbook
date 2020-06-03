@@ -1,29 +1,28 @@
-# Callback of level button click (2 cases, only level requests and class + level requests)
-from globals import get_last_class_name, get_spellbook, set_last_class_name, set_cached_spells
+from globals import get_spellbook, CACHED_SPELL, LAST_CLASS_NAME
 from keyboard_manager import get_spells_keyboard
 from message_manager import edit_message_with_keyboard
-
 
 
 SPELL_MESSAGE = "Scegli un incantesimo:"
 NO_SPELL_MESSAGE = "Nessun incantesimo trovato!"
 
+
+# Callback of level button click (2 cases, only level requests and class + level requests)
 def callback_level(update, context, choice):
     bot = context.bot
     message = update.callback_query.message
     # Db request
     spells = []
     keyboards = ""
-    if get_last_class_name() != "":
-        spells = get_spellbook().get_spells_by_class_level(get_last_class_name(), choice)
+    if context.user_data[LAST_CLASS_NAME] != "":
+        spells = get_spellbook().get_spells_by_class_level(context.user_data["last_class_name"], choice)
         keyboard = get_spells_keyboard(spells, "name")
-        set_last_class_name("")
+        context.user_data[LAST_CLASS_NAME] = ""
     else:
         spells = get_spellbook().get_spells_by_level(choice)
         keyboard = get_spells_keyboard(spells, "class")
-    set_cached_spells(spells)
     if spells:
-        set_cached_spells(spells)
+        context.user_data[CACHED_SPELL] = spells
         text = SPELL_MESSAGE
     else:
         text = NO_SPELL_MESSAGE
