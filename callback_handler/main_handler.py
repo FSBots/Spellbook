@@ -4,13 +4,6 @@ from callback_handler.spell_options_handler import callback_spell_options, callb
 from keyboard_manager import *
 from message_manager import *
 
-FORCED_REPLY_MESSAGE = "Spara un nome!"
-LEVELS_MESSAGE = "Scegli un livello:"
-CLASSES_MESSAGE = "Scegli una classe:"
-SPELL_MESSAGE = "Scegli un incantesimo:"
-NO_SPELL_MESSAGE = "Nessun incantesimo trovato!"
-HISTORY_LIMIT = "5"
-
 
 # Main handler
 def main_callback_handler(update, context):
@@ -61,19 +54,29 @@ def callback_menu(update, context, choice):
         edit_message_with_keyboard(context.bot, message, text, keyboard)
 
     elif choice == "Statistiche":
-        send_message_text(context.bot, message.chat_id, "NO!")
+        stats = get_spellbook().get_stats(message.chat_id)
+        send_html_message(update.callback_query, context, get_stats_message(stats))
+
+
+def get_stats_message(stats):
+    return "<b>Statistiche globali:</b>" + \
+           "\nUtenti totali: " + str(stats["total_users"]) + \
+           "\nUtenti online: " + str(stats["current_online"]) + \
+           "\nSpell piú richiesta: " + stats["favourite_spell"] + \
+           "\n\n<b>Statistiche personali:</b>" + \
+           "\nSpell piú richiesta: " + stats["your_favourite_spell"] + \
+           "\nRicerche totali: " + str(stats["total_searched"]) + \
+           "\nTempo risparmiato: " + str(stats["time_saved"])
 
 
 # Callback of a Reply message, used for requests by name
 def reply_message_callback_handler(update, context):
-    message = update.message
-    bot = context.bot
     # Db request
-    spells = get_spellbook().get_spells_by_name(message.text)
+    spells = get_spellbook().get_spells_by_name(update.message.text)
     keyboard = get_spells_keyboard(spells, "classlevel")
     if spells:
         context.user_data[CACHED_SPELL] = spells
         text = SPELL_MESSAGE
     else:
         text = NO_SPELL_MESSAGE
-    send_message_with_keyboard(bot, message, text, keyboard)
+    send_html_message(update, context, text, keyboard)

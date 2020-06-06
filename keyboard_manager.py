@@ -1,15 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
-# Button array
-classes_keyboard = [["Bardo", "Chierico", "Druido", "Mago"],
-           ["Paladino", "Ranger", "Stregone", "Warlock"]]
-
-levels_keyboard = [["Lv. 0", "Lv. 1", "Lv. 2", "Lv. 3", "Lv. 4"],
-          ["Lv. 5", "Lv. 6", "Lv. 7", "Lv. 8", "Lv. 9"]]
-
-menu_keyboard = [["Nome", "Livello"], ["Classe e livello"], ["Recenti", "Statistiche"]]
-spell_options_keyboard = [["Segnala", "Nuova ricerca"]]
-report_keybord = [["Descrizione", "Info"], ["Tipo", "Livello"]]
+from globals import *
 
 
 # Create a keyboard from the array passed as parameter

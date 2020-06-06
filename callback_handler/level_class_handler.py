@@ -1,10 +1,6 @@
-from globals import get_spellbook, CACHED_SPELL, LAST_CLASS_NAME
+from globals import *
 from keyboard_manager import get_spells_keyboard
 from message_manager import edit_message_with_keyboard
-
-
-SPELL_MESSAGE = "Scegli un incantesimo:"
-NO_SPELL_MESSAGE = "Nessun incantesimo trovato!"
 
 
 # Callback of level button click (2 cases, only level requests and class + level requests)

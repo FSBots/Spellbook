@@ -1,9 +1,8 @@
 from telegram.error import BadRequest
-from spellbook import logger
-from globals import LAST_SPELL_NAME, get_spellbook, CACHED_SPELL, LAST_MESSAGE_ID
+
+from globals import LAST_SPELL_NAME, get_spellbook, CACHED_SPELL, LAST_MESSAGE_ID, logger
 from keyboard_manager import get_under_spell_keybord
 from message_manager import edit_last_html_message, send_html_message
-
 
 # Callback of a spell request
 # Update the last spell retrieved with the new one
@@ -12,16 +11,14 @@ def callback_name(update, context, choice):
     message = update.callback_query.message
     last_message_id = context.user_data[LAST_MESSAGE_ID]
     spell = get_spell_from_cache(context, choice)
-
     if last_message_id is not None:
         try:
             edit_last_html_message(bot, message, last_message_id, spell, get_under_spell_keybord())
         except BadRequest:
             logger.info("Message is not modified, same spell requested!")
     else:
-        message_sended = send_html_message(bot, message, spell, get_under_spell_keybord())
+        message_sended = send_html_message(update.callback_query, context, spell, get_under_spell_keybord())
         context.user_data[LAST_MESSAGE_ID] = message_sended.message_id
-
     context.user_data[LAST_SPELL_NAME] = choice
     get_spellbook().add_in_history_by_id(message.chat_id, choice)
 
