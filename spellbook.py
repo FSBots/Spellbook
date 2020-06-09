@@ -11,7 +11,6 @@ from spellbook_db import Spellbook
 chat_id_boss = [1936841, 81503607]
 
 
-
 def generate_starting_message(id):
     message = ""
     if id == chat_id_boss[0]:
@@ -24,8 +23,8 @@ def generate_starting_message(id):
 # Initialization of the user_data context for storing data
 def initialize_context(context):
     context.user_data[LAST_CLASS_NAME] = ""
-    context.user_data[LAST_MESSAGE_ID] = ""
-    context.user_data[CACHED_SPELL] = ""
+    context.user_data[LAST_MESSAGE_ID] = []
+    context.user_data[CACHED_SPELL] = []
     context.user_data[LAST_SPELL_NAME] = ""
 
 
@@ -47,7 +46,7 @@ def start(update, context):
     message = generate_starting_message(update.message["chat"]["id"])
     while True:
         try:
-            send_html_message(update, context, message, keyboard)
+            send_message(update, context, message, keyboard)
         except NetworkError:
             # Network Error exception is raised when bot is unused for some time and then /start is called
             logger.error("Network error, bot unused for some time!")
@@ -58,8 +57,13 @@ def start(update, context):
 
 
 # /help
+def change_language(update, context):
+    send_message(update, context, "NO!")
+
+
+# /help
 def help(update, context):
-    send_html_message(update, context, HELP_MESSAGE)
+    send_message(update, context, HELP_MESSAGE)
 
 
 # /error
@@ -73,6 +77,7 @@ def main():
     set_spellbook(Spellbook())  # Database initialization
     updater = Updater(token, use_context=True)
     updater.dispatcher.add_handler(CommandHandler('start', start))
+    updater.dispatcher.add_handler(CommandHandler('language', change_language))
     updater.dispatcher.add_handler(CallbackQueryHandler(main_callback_handler))
     updater.dispatcher.add_handler(CommandHandler('help', help))
     updater.dispatcher.add_handler(MessageHandler(Filters.reply, reply_message_callback_handler))

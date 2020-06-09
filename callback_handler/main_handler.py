@@ -28,20 +28,19 @@ def main_callback_handler(update, context):
 # Callback of a main menu click
 def callback_menu(update, context, choice):
     message = update.callback_query.message
-    context.user_data[LAST_MESSAGE_ID] = None
 
     if choice == "Nome":
-        send_forced_message(context.bot, message, FORCED_REPLY_MESSAGE)
+        send_forced_message(update.callback_query, context, FORCED_REPLY_MESSAGE)
 
     elif choice == "Livello":
         keyboard = get_levels_keyboard()
         text = LEVELS_MESSAGE
-        edit_message_with_keyboard(context.bot, message, text, keyboard)
+        edit_message(update.callback_query, context, text, keyboard)
 
     elif choice == "Classe e livello":
         keyboard = get_classes_keyboard()
         text = CLASSES_MESSAGE
-        edit_message_with_keyboard(context.bot, message, text, keyboard)
+        edit_message(update.callback_query, context, text, keyboard)
 
     elif choice == "Recenti":
         spells = get_spellbook().get_spells_history(message.chat_id, HISTORY_LIMIT)
@@ -51,11 +50,11 @@ def callback_menu(update, context, choice):
             text = SPELL_MESSAGE
         else:
             text = NO_SPELL_MESSAGE
-        edit_message_with_keyboard(context.bot, message, text, keyboard)
+        edit_message(update.callback_query, context, text, keyboard)
 
     elif choice == "Statistiche":
         stats = get_spellbook().get_stats(message.chat_id)
-        send_html_message(update.callback_query, context, get_stats_message(stats))
+        send_message(update.callback_query, context, get_stats_message(stats))
 
 
 def get_stats_message(stats):
@@ -79,4 +78,4 @@ def reply_message_callback_handler(update, context):
         text = SPELL_MESSAGE
     else:
         text = NO_SPELL_MESSAGE
-    send_html_message(update, context, text, keyboard)
+    send_message(update, context, text, keyboard)

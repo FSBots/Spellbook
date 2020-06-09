@@ -1,4 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
 from globals import *
 
 
@@ -48,26 +49,26 @@ def get_levels_keyboard():
 
 # Directly created InlineKeyboardButton instances, composed by [decorated spell name,(callbackstring,spell name]
 # Notice that the spell name in the callback is not the same displayed in the button
-def get_spells_keyboard(list, mode):
+def get_spells_keyboard(spell_list, mode):
     spells = []
-    for tupla in list:
+    for tupla in spell_list:
         name = tupla['Name']
         if mode == "class":
-            classe = tupla['Class']
-            str_button = name + "[" + classe + "]"
+            cl = tupla['Class']
+            str_button = name + "[" + cl + "]"
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "level":
             livello = tupla['Level']
             str_button = "Lv" + str(livello) + "-" + name
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "classlevel":
-            classe = tupla['Class']
+            cl = tupla['Class']
             livello = tupla['Level']
-            str_button = "Lv" + str(livello) + "-" + name + "[" + classe + "]"
+            str_button = "Lv" + str(livello) + "-" + name + "[" + cl + "]"
             button = InlineKeyboardButton(str_button, callback_data="name," + name)
         elif mode == "name":
             button = InlineKeyboardButton(name, callback_data="name," + name)
         spells.append([button])
-        if spells.__len__() > 70:
+        if spells.__len__() > MAX_NUMBER_SPELL:
             break
     return InlineKeyboardMarkup(spells)

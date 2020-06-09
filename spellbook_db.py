@@ -12,11 +12,9 @@ class Spellbook:
     cursor = None
 
     def __init__(self):
-
         self.database_connection = MySQLdb.connect(address, username,
                                                    password, db_name)
         self.cursor = self.database_connection.cursor()
-
         logger.info("Database initialized")
 
     def check_connection(self):

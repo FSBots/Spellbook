@@ -17,9 +17,16 @@ LAST_SPELL_NAME = "last_spell_name"
 # Number of spells in history
 HISTORY_LIMIT = "5"
 
+# Max length of a message (default of telegram API)
+MAX_MESSAGE_LENGTH = 4096
+
+# Max number of spells in a single request
+# (telegram max buttons in a single message is 100)
+MAX_NUMBER_SPELL = 70
+
 import logging
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -54,14 +61,14 @@ def set_users_list(name):
 
 
 # Button array
-# todo spariscono con il multilingua e vengono settate all'inizio
 classes_keyboard = [["Bardo", "Chierico", "Druido", "Mago"],
                     ["Paladino", "Ranger", "Stregone", "Warlock"]]
 levels_keyboard = [["Lv. 0", "Lv. 1", "Lv. 2", "Lv. 3", "Lv. 4"],
                    ["Lv. 5", "Lv. 6", "Lv. 7", "Lv. 8", "Lv. 9"]]
 menu_keyboard = [["Nome", "Livello"], ["Classe e livello"], ["Recenti", "Statistiche"]]
-spell_options_keyboard = [["Segnala", "Nuova ricerca"]]
-report_keybord = [["Descrizione", "Info"], ["Tipo", "Livello"]]
+spell_options_keyboard = [["Segnala incantesimo", "Nuova ricerca"]]
+report_keybord = [["Errore di battitura"], ["Incongruenza con il manuale"]
+    , ["Associato a classe errata"], ["Associato a livello errato"]]
 
 # Strings
 STARTING_MESSAGE = "Ricerca incantesimo per:"
@@ -71,3 +78,6 @@ NO_SPELL_MESSAGE = "Nessun incantesimo trovato!"
 FORCED_REPLY_MESSAGE = "Spara un nome!"
 LEVELS_MESSAGE = "Scegli un livello:"
 CLASSES_MESSAGE = "Scegli una classe:"
+UNDER_SPELL_MESSAGE = "Cosa vuoi fare adesso?"
+REPORT_DONE_MESSAGE = "Segnalazione effettuata!"
+REPORT_MESSAGE = "Seleziona la parte dell'incantesimo errata:"
