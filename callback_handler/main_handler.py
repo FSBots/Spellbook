@@ -23,6 +23,9 @@ def main_callback_handler(update, context):
     elif callback == "class":
         context.user_data[LAST_CLASS_NAME] = choice
         callback_menu(update, context, "Livello")
+    elif callback == "school":
+        context.user_data[LAST_SCHOOL_NAME] = choice
+        callback_menu(update, context, "Livello")
 
 
 # Callback of a main menu click
@@ -42,6 +45,11 @@ def callback_menu(update, context, choice):
         text = CLASSES_MESSAGE
         edit_message(update.callback_query, context, text, keyboard)
 
+    elif choice == "Scuola e livello":
+        keyboard = get_schools_keyboard()
+        text = SCHOOLS_MESSAGE
+        edit_message(update.callback_query, context, text, keyboard)
+
     elif choice == "Recenti":
         spells = get_spellbook().get_spells_history(message.chat_id, HISTORY_LIMIT)
         keyboard = get_spells_keyboard(spells, "classlevel")
@@ -54,7 +62,9 @@ def callback_menu(update, context, choice):
 
     elif choice == "Statistiche":
         stats = get_spellbook().get_stats(message.chat_id)
-        send_message(update.callback_query, context, get_stats_message(stats))
+        edit_message(update.callback_query, context, get_stats_message(stats))
+        keyboard = get_menu_keyboard()
+        send_message(update.callback_query, context, STARTING_MESSAGE, keyboard)
 
 
 def get_stats_message(stats):

@@ -88,7 +88,7 @@ def splitter(s):
 def get_first_space_index(index, s):
     i = index
     while i > 0:
-        if s[i] == ' ' or s[i] == '\n':
+        if s[i] == '\n':
             return i
         else:
             i -= 1

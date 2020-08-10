@@ -45,6 +45,10 @@ class Spellbook:
         query = ("CALL `get_spells_by_class_level`('" + spell_class + "','" + str(spell_lvl) + "');")
         return self.get_query_result(query)
 
+    def get_spells_by_level_school(self, spell_school, spell_lvl):
+        query = ("CALL `get_spells_by_level_school`('" + str(spell_lvl) + "','" + spell_school + "');")
+        return self.get_query_result(query)
+
     def get_spells_by_class(self, spell_class):
         query = ("CALL `get_spells_by_class`('" + spell_class + "');")
         return self.get_query_result(query)

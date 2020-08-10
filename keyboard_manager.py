@@ -20,6 +20,11 @@ def get_classes_keyboard():
     return InlineKeyboardMarkup(keyboard)
 
 
+def get_schools_keyboard():
+    keyboard = create_base_keyboard(schools_keyboard, "school")
+    return InlineKeyboardMarkup(keyboard)
+
+
 def get_menu_keyboard():
     keyboard = create_base_keyboard(menu_keyboard, "menu")
     return InlineKeyboardMarkup(keyboard)

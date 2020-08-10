@@ -23,6 +23,7 @@ def generate_starting_message(id):
 # Initialization of the user_data context for storing data
 def initialize_context(context):
     context.user_data[LAST_CLASS_NAME] = ""
+    context.user_data[LAST_SCHOOL_NAME] = ""
     context.user_data[LAST_MESSAGE_ID] = []
     context.user_data[CACHED_SPELL] = []
     context.user_data[LAST_SPELL_NAME] = ""
@@ -66,6 +67,11 @@ def help(update, context):
     send_message(update, context, HELP_MESSAGE)
 
 
+# /credits
+def credits(update, context):
+    send_message(update, context, CREDITS_MESSAGE)
+
+
 # /error
 def error(update, context):
     logger.warning('Update "%s"', update)
@@ -80,6 +86,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('language', change_language))
     updater.dispatcher.add_handler(CallbackQueryHandler(main_callback_handler))
     updater.dispatcher.add_handler(CommandHandler('help', help))
+    updater.dispatcher.add_handler(CommandHandler('credits', credits))
     updater.dispatcher.add_handler(MessageHandler(Filters.reply, reply_message_callback_handler))
     updater.dispatcher.add_error_handler(error)
     # Start the Bot
