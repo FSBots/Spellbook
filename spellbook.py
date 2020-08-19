@@ -9,14 +9,16 @@ from message_manager import *
 from spellbook_db import Spellbook
 
 chat_id_boss = [1936841, 81503607]
-
+chat_id_dito_lesto = [116842868]
 
 def generate_starting_message(id):
     message = ""
     if id == chat_id_boss[0]:
         message = "Ciao Babbo Salo!\n"
-    if id == chat_id_boss[1]:
+    elif id == chat_id_boss[1]:
         message = "Ciao Babbo Frusco!\n"
+    elif id in chat_id_dito_lesto:
+        message = "Ciao Dito Lesto!\n"
     return message + STARTING_MESSAGE
 
 

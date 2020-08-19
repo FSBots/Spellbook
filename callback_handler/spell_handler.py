@@ -59,6 +59,8 @@ def get_spell_from_cache(context, choice):
         if tupla['Name'] == choice:
             if tupla['Manual'] == 'Xanathar':
                 spell = '<b>' + str.upper(choice) + ' [XAN]\n'
+            elif tupla['Manual'] == 'Costa della Spada':
+                    spell = '<b>' + str.upper(choice) + ' [CDS]\n'
             else:
                 spell = '<b>' + str.upper(choice) + '\n'
             spell += tupla['School'] + ' di livello ' + str(tupla['Level']) + '</b>\n' + \
