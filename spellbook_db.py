@@ -57,23 +57,35 @@ class Spellbook:
         query = ("CALL `get_spells_by_name`('" + spell_name + "');")
         return self.get_query_result(query)
 
+    def insert_new_spell_version(self, group_id, new_name, new_description, new_author):
+        query = ("CALL `insert_new_spell_version`('" + str(group_id) + "','" + new_name + "','" + new_description + "','" + new_author + "');")
+        self.check_connection()
+        self.cursor.execute(query)
+        self.database_connection.commit()
+        return True
+
+    def get_spell_to_modify(self):
+        query = "CALL get_spell_to_modify();"
+        return self.get_query_result(query)
+
     def get_query_result(self, query):
         self.check_connection()
         self.cursor.execute(query)
         content_list = []
         aux = {}
         for row in self.cursor:
-            aux["Class"] = row[8]
-            aux["Name"] = row[0]
-            aux["School"] = row[1]
-            aux["Level"] = row[2]
-            aux["CastingTime"] = row[3]
-            aux["Components"] = row[4]
-            aux["Duration"] = row[5]
-            aux["Range"] = row[6]
-            aux["Description"] = row[7]
-            aux["Manual"] = row[9]
-
+            aux["IdSpellGroup"] = row[1]
+            aux["Author"] = row[2]
+            aux["Version"] = row[3]
+            aux["Manual"] = row[4]
+            aux["Name"] = row[5]
+            aux["School"] = row[6]
+            aux["Level"] = row[7]
+            aux["CastingTime"] = row[8]
+            aux["Range"] = row[9]
+            aux["Components"] = row[10]
+            aux["Duration"] = row[11]
+            aux["Description"] = row[12]
             content_list.append(aux)
             aux = {}
         return content_list
@@ -144,20 +156,6 @@ class Spellbook:
         for row in self.cursor:
             content_list.append(row[0])
         return content_list
-
-    # Unused methods
-    def remove_favourite(self, user_id, spell_name):
-        try:
-            query = ("CALL `remove_favourite`('" + str(user_id) + "','" + spell_name + "');")
-            self.cursor.execute(query)
-            self.database_connection.commit()
-            return True
-        except:
-            return False
-
-    def get_favourite(self, user_id):
-        query = ("CALL `get_favourite`('" + str(user_id) + "');")
-        return self.get_query_result(query)
 
     def print_result(self, content):
         for tupla in content:
