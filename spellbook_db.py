@@ -1,10 +1,14 @@
 import pymysql
 
 from db_credentials import *
-from globals import logger
 
 pymysql.install_as_MySQLdb()
 import MySQLdb
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Spellbook:
@@ -12,10 +16,12 @@ class Spellbook:
     cursor = None
 
     def __init__(self):
+        logger.info("SpellBookSetter Bot is running bro!")
         self.database_connection = MySQLdb.connect(address, username,
                                                    password, db_name)
         self.cursor = self.database_connection.cursor()
         logger.info("Database initialized")
+        logger.info("GG")
 
     def check_connection(self):
         try:
@@ -64,6 +70,34 @@ class Spellbook:
         self.database_connection.commit()
         return True
 
+    def insert_new_spell_into_queue(self, group_id, new_name, new_description, new_author):
+        query = ("CALL `insert_new_spell_into_queue`('" + str(group_id) + "','" + new_name + "','" + new_description + "','" + new_author + "');")
+        self.check_connection()
+        self.cursor.execute(query)
+        self.database_connection.commit()
+        return True
+
+    def delete_from_spells_queue(self, id):
+        query = ("CALL `delete_from_spells_queue`('" + str(id) + "');")
+        self.check_connection()
+        self.cursor.execute(query)
+        self.database_connection.commit()
+        return True
+
+    def get_spell_from_queue(self):
+        query = "CALL get_spell_from_queue();"
+        self.check_connection()
+        self.cursor.execute(query)
+        aux = {}
+        for row in self.cursor:
+            aux["QueueId"] = row[0]
+            aux["QId"] = row[1]
+            aux["QName"] = row[2]
+            aux["QDescription"] = row[3]
+            aux["QAuthor"] = row[4]
+            aux["TrueName"] = row[5]
+        return aux
+
     def get_spell_to_modify(self):
         query = "CALL get_spell_to_modify();"
         return self.get_query_result(query)
@@ -74,18 +108,18 @@ class Spellbook:
         content_list = []
         aux = {}
         for row in self.cursor:
-            aux["IdSpellGroup"] = row[1]
-            aux["Author"] = row[2]
-            aux["Version"] = row[3]
-            aux["Manual"] = row[4]
-            aux["Name"] = row[5]
-            aux["School"] = row[6]
-            aux["Level"] = row[7]
-            aux["CastingTime"] = row[8]
-            aux["Range"] = row[9]
-            aux["Components"] = row[10]
-            aux["Duration"] = row[11]
-            aux["Description"] = row[12]
+            aux["IdSpellGroup"] = row[2]
+            aux["Author"] = row[3]
+            aux["Version"] = row[4]
+            aux["Manual"] = row[5]
+            aux["Name"] = row[6]
+            aux["School"] = row[7]
+            aux["Level"] = row[8]
+            aux["CastingTime"] = row[9]
+            aux["Range"] = row[10]
+            aux["Components"] = row[11]
+            aux["Duration"] = row[12]
+            aux["Description"] = row[13]
             content_list.append(aux)
             aux = {}
         return content_list
