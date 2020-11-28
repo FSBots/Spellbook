@@ -52,7 +52,7 @@ def callback_menu(update, context, choice):
 
     elif choice == "Recenti":
         spells = get_spellbook().get_spells_history(message.chat_id, HISTORY_LIMIT)
-        keyboard = get_spells_keyboard(spells, "classlevel")
+        keyboard = get_spells_keyboard(spells, "level")
         if spells:
             context.user_data[CACHED_SPELL] = spells
             text = SPELL_MESSAGE
@@ -73,9 +73,7 @@ def get_stats_message(stats):
            "\nUtenti online: " + str(stats["current_online"]) + \
            "\nSpell piú richiesta: " + stats["favourite_spell"] + \
            "\n\n<b>Statistiche personali:</b>" + \
-           "\nSpell piú richiesta: " + stats["your_favourite_spell"] + \
-           "\nRicerche totali: " + str(stats["total_searched"]) + \
-           "\nTempo risparmiato: " + str(stats["time_saved"])
+           "\nSpell piú richiesta: " + stats["your_favourite_spell"]
 
 
 # Callback of a Reply message, used for requests by name

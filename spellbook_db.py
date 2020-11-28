@@ -39,7 +39,7 @@ class Spellbook:
 
     def get_spells_by_level(self, lvl):
         query = ("CALL `get_spells_by_level`('" + str(lvl) + "');")
-        return self.get_query_result(query)
+        return self.get_query_result_complete(query)
 
     def get_spells_by_class_level(self, spell_class, spell_lvl):
         query = ("CALL `get_spells_by_class_level`('" + spell_class + "','" + str(spell_lvl) + "');")
@@ -47,7 +47,7 @@ class Spellbook:
 
     def get_spells_by_level_school(self, spell_school, spell_lvl):
         query = ("CALL `get_spells_by_level_school`('" + str(spell_lvl) + "','" + spell_school + "');")
-        return self.get_query_result(query)
+        return self.get_query_result_complete(query)
 
     def get_spells_by_class(self, spell_class):
         query = ("CALL `get_spells_by_class`('" + spell_class + "');")
@@ -55,7 +55,7 @@ class Spellbook:
 
     def get_spells_by_name(self, spell_name):
         query = ("CALL `get_spells_by_name`('" + spell_name + "');")
-        return self.get_query_result(query)
+        return self.get_query_result_complete(query)
 
     def get_query_result(self, query):
         self.check_connection()
@@ -63,16 +63,42 @@ class Spellbook:
         content_list = []
         aux = {}
         for row in self.cursor:
-            aux["Class"] = row[8]
-            aux["Name"] = row[0]
-            aux["School"] = row[1]
-            aux["Level"] = row[2]
-            aux["CastingTime"] = row[3]
-            aux["Components"] = row[4]
-            aux["Duration"] = row[5]
-            aux["Range"] = row[6]
-            aux["Description"] = row[7]
-            aux["Manual"] = row[9]
+            aux["IdSpellGroup"] = row[1]
+            aux["Author"] = row[2]
+            aux["Version"] = row[3]
+            aux["Manual"] = row[4]
+            aux["Name"] = row[5]
+            aux["School"] = row[6]
+            aux["Level"] = row[7]
+            aux["CastingTime"] = row[8]
+            aux["Range"] = row[9]
+            aux["Components"] = row[10]
+            aux["Duration"] = row[11]
+            aux["Description"] = row[12]
+
+            content_list.append(aux)
+            aux = {}
+        return content_list
+
+    def get_query_result_complete(self, query):
+        self.check_connection()
+        self.cursor.execute(query)
+        content_list = []
+        aux = {}
+        for row in self.cursor:
+            aux["IdSpellGroup"] = row[1]
+            aux["Author"] = row[2]
+            aux["Version"] = row[3]
+            aux["Manual"] = row[4]
+            aux["Name"] = row[5]
+            aux["School"] = row[6]
+            aux["Level"] = row[7]
+            aux["CastingTime"] = row[8]
+            aux["Range"] = row[9]
+            aux["Components"] = row[10]
+            aux["Duration"] = row[11]
+            aux["Description"] = row[12]
+            aux["Class"] = row[13]
 
             content_list.append(aux)
             aux = {}
@@ -110,16 +136,7 @@ class Spellbook:
 
     def get_spells_history(self, chat_id, limit):
         query = "CALL get_spells_history('" + str(chat_id) + "','" + str(limit) + "');"
-        return self.get_query_result(query)
-
-    def get_users(self):
-        self.check_connection()
-        query = "CALL get_users();"
-        self.cursor.execute(query)
-        content_list = []
-        for row in self.cursor:
-            content_list.append(row[0])
-        return content_list
+        return self.get_query_result_complete(query)
 
     def get_stats(self, chat_id):
         self.check_connection()
@@ -128,8 +145,7 @@ class Spellbook:
         stored_results = self.cursor.fetchall()
         content_list = {"total_users": stored_results[0][0], "current_online": stored_results[0][1],
                         "favourite_spell": stored_results[0][2],
-                        "your_favourite_spell": stored_results[0][3], "time_saved": stored_results[0][4],
-                        "total_searched": stored_results[0][5]}
+                        "your_favourite_spell": stored_results[0][3]}
         return content_list
 
     def get_spells_history(self, chat_id, limit):
@@ -138,7 +154,7 @@ class Spellbook:
 
     def get_users(self):
         self.check_connection()
-        query = ("CALL get_users();")
+        query = ("CALL get_user_list();")
         self.cursor.execute(query)
         content_list = []
         for row in self.cursor:
