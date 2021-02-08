@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['generate_5fstarting_5fmessage_162',['generate_starting_message',['../namespacespellbook.html#a4d8cec2ca49f091a62cd8c48348a2b2c',1,'spellbook']]],
+  ['get_5fclasses_5fkeyboard_163',['get_classes_keyboard',['../namespacekeyboard__manager.html#a6840853029cf455aad2abd1b7d48d666',1,'keyboard_manager']]],
+  ['get_5ffavourite_164',['get_favourite',['../classspellbook__db_1_1_spellbook.html#a0e4a0e6e55b88c6f67488f411a535359',1,'spellbook_db::Spellbook']]],
+  ['get_5ffirst_5fspace_5findex_165',['get_first_space_index',['../namespacespell__handler.html#a8ce4e4c3f71c4f2624eb4847512f1f47',1,'spell_handler']]],
+  ['get_5flevels_5fkeyboard_166',['get_levels_keyboard',['../namespacekeyboard__manager.html#a7722d5a7a6e38465d4dbc23c1fcee2d7',1,'keyboard_manager']]],
+  ['get_5fmenu_5fkeyboard_167',['get_menu_keyboard',['../namespacekeyboard__manager.html#a0e9c4a4adc477d14197d38f46d86165d',1,'keyboard_manager']]],
+  ['get_5fquery_5fresult_168',['get_query_result',['../classspellbook__db_1_1_spellbook.html#a9e922a640e188495a8716a839a936be5',1,'spellbook_db::Spellbook']]],
+  ['get_5fquery_5fresult_5fcomplete_169',['get_query_result_complete',['../classspellbook__db_1_1_spellbook.html#a59a56c9bf9a88bf1c6047f563bced022',1,'spellbook_db::Spellbook']]],
+  ['get_5freport_5fkeybord_170',['get_report_keybord',['../namespacekeyboard__manager.html#aadf3129ff1422824b4a6fc6590364f17',1,'keyboard_manager']]],
+  ['get_5fschools_5fkeyboard_171',['get_schools_keyboard',['../namespacekeyboard__manager.html#a65a807858a7ef3297f403f3167facbc5',1,'keyboard_manager']]],
+  ['get_5fspell_5ffrom_5fcache_172',['get_spell_from_cache',['../namespacespell__handler.html#a8b2ff7519e42658f8dff1824eeb2e84f',1,'spell_handler']]],
+  ['get_5fspellbook_173',['get_spellbook',['../namespaceglobals.html#a8733771ae06113e4ad1e3b57f53f1809',1,'globals']]],
+  ['get_5fspells_5fby_5fclass_174',['get_spells_by_class',['../classspellbook__db_1_1_spellbook.html#aa3bbcfae40ebb6ed79862a2b7553924b',1,'spellbook_db::Spellbook']]],
+  ['get_5fspells_5fby_5fclass_5flevel_175',['get_spells_by_class_level',['../classspellbook__db_1_1_spellbook.html#aa9d69ca549ea68f0a3984020c45cd76a',1,'spellbook_db::Spellbook']]],
+  ['get_5fspells_5fby_5flevel_176',['get_spells_by_level',['../classspellbook__db_1_1_spellbook.html#a13e99b387d61afe5e9faaa4336092e16',1,'spellbook_db::Spellbook']]],
+  ['get_5fspells_5fby_5flevel_5fschool_177',['get_spells_by_level_school',['../classspellbook__db_1_1_spellbook.html#a5e4914a5895a7687659f1d560d3c3983',1,'spellbook_db::Spellbook']]],
+  ['get_5fspells_5fby_5fname_178',['get_spells_by_name',['../classspellbook__db_1_1_spellbook.html#ac1debe2ed6eed7237dc7d358abb40bc3',1,'spellbook_db::Spellbook']]],
+  ['get_5fspells_5fhistory_179',['get_spells_history',['../classspellbook__db_1_1_spellbook.html#aa0bc970a70a78a3d491420cb15c09e70',1,'spellbook_db.Spellbook.get_spells_history(self, chat_id, limit)'],['../classspellbook__db_1_1_spellbook.html#aa0bc970a70a78a3d491420cb15c09e70',1,'spellbook_db.Spellbook.get_spells_history(self, chat_id, limit)']]],
+  ['get_5fspells_5fkeyboard_180',['get_spells_keyboard',['../namespacekeyboard__manager.html#a4781860d675df610a1a7a056478d1bc8',1,'keyboard_manager']]],
+  ['get_5fstats_181',['get_stats',['../classspellbook__db_1_1_spellbook.html#ac2e6460357571a50fc028cb69164593b',1,'spellbook_db::Spellbook']]],
+  ['get_5fstats_5fmessage_182',['get_stats_message',['../namespacemain__handler.html#a79d079a2f58a8d7f0f7682e1e83ccc69',1,'main_handler']]],
+  ['get_5funder_5fspell_5fkeybord_183',['get_under_spell_keybord',['../namespacekeyboard__manager.html#a505dcfeab7b1c00b2f58ff951e8bd21f',1,'keyboard_manager']]],
+  ['get_5fusers_184',['get_users',['../classspellbook__db_1_1_spellbook.html#aff10c496ef4d507371b285295770d0b4',1,'spellbook_db::Spellbook']]],
+  ['get_5fusers_5flist_185',['get_users_list',['../namespaceglobals.html#abe1de95de01c25ffb6954c3d062cb333',1,'globals']]]
+];

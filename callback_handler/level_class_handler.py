@@ -3,7 +3,10 @@ from keyboard_manager import get_spells_keyboard
 from message_manager import edit_message
 
 
-# Callback of level button click (2 cases, only level requests and class + level requests)
+## Callback of level button click (2 cases, only level requests and class + level requests)
+#@param update : message context
+#@param context : user context
+#@param choice : button pressed as string ( in this case a spell level )
 def callback_level(update, context, choice):
 
     if context.user_data[LAST_CLASS_NAME] != "": # Class-Level

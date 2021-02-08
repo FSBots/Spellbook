@@ -3,7 +3,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from globals import *
 
 
-# Create a keyboard from the array passed as parameter
+## Create a keyboard from the array passed as parameter
 def create_base_keyboard(keyboard, callback_string=""):
     res = []
     col = []
@@ -40,7 +40,7 @@ def get_report_keybord():
     return InlineKeyboardMarkup(keyboard)
 
 
-# Directly created InlineKeyboardButton instances, customized for levels
+## Directly created InlineKeyboardButton instances, customized for levels
 def get_levels_keyboard():
     keyboard = []
     col = []
@@ -52,8 +52,8 @@ def get_levels_keyboard():
     return InlineKeyboardMarkup(keyboard)
 
 
-# Directly created InlineKeyboardButton instances, composed by [decorated spell name,(callbackstring,spell name]
-# Notice that the spell name in the callback is not the same displayed in the button
+## Directly created InlineKeyboardButton instances, composed by [decorated spell name,(callbackstring,spell name]
+#@note Notice that the spell name in the callback is not the same displayed in the button
 def get_spells_keyboard(spell_list, mode):
     spells = []
     for tupla in spell_list:

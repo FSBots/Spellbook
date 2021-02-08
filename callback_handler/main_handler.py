@@ -5,7 +5,9 @@ from keyboard_manager import *
 from message_manager import *
 
 
-# Main handler
+## Main handler
+#@param update : message context
+#@param context : user context
 def main_callback_handler(update, context):
     query = update.callback_query
     callback, choice = str(query.data).split(",")
@@ -28,7 +30,10 @@ def main_callback_handler(update, context):
         callback_menu(update, context, "Livello")
 
 
-# Callback of a main menu click
+## Callback of a main menu click
+#@param update : message context
+#@param context : user context
+#@param choice : button pressed as string
 def callback_menu(update, context, choice):
     message = update.callback_query.message
 
@@ -66,7 +71,9 @@ def callback_menu(update, context, choice):
         keyboard = get_menu_keyboard()
         send_message(update.callback_query, context, STARTING_MESSAGE, keyboard)
 
-
+##Get DB stats as formatted string
+#@param stats : result set of get_stats query as dictionary
+#@return stats as formatted string
 def get_stats_message(stats):
     return "<b>Statistiche globali:</b>" + \
            "\nUtenti totali: " + str(stats["total_users"]) + \
@@ -76,7 +83,9 @@ def get_stats_message(stats):
            "\nSpell piú richiesta: " + stats["your_favourite_spell"]
 
 
-# Callback of a Reply message, used for requests by name
+## Callback of a Reply message, used for requests by name
+#@param update : message context
+#@param context : user context
 def reply_message_callback_handler(update, context):
     # Db request
     spells = get_spellbook().get_spells_by_name(update.message.text)

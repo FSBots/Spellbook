@@ -3,7 +3,10 @@ from keyboard_manager import get_menu_keyboard, get_report_keybord
 from message_manager import send_message, edit_message
 
 
-# Callback of a spell option buttons (under a spell)
+## Callback of a spell option buttons (under a spell)
+#@param update : message context
+#@param context : user context
+#@param choice : button pressed as string
 def callback_spell_options(update, context, choice):
     if choice == "Segnala incantesimo":
         keyboard = get_report_keybord()
@@ -14,7 +17,10 @@ def callback_spell_options(update, context, choice):
     context.user_data[LAST_MESSAGE_ID] = []
 
 
-# Callback of a report buttons
+## Callback of a report buttons
+#@param update : message context
+#@param context : user context
+#@param choice : button pressed as string
 def callback_report(update, context, choice):
     chat_id = update.callback_query.message.chat_id
     spell_to_report = context.user_data[LAST_SPELL_NAME]
